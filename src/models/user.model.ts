@@ -2,7 +2,8 @@ import { model, Schema } from 'mongoose';
 
 type UserModelType = {
 	_id: string;
-	user: string;
+	id: string;
+	username: string;
 	password: string;
 	enabled: boolean;
 	permissions: string[];
@@ -10,7 +11,11 @@ type UserModelType = {
 
 const UserSchema = new Schema<UserModelType>(
 	{
-		user: {
+		id: {
+			type: String,
+			required: true,
+		},
+		username: {
 			type: String,
 			required: true,
 		},
@@ -19,7 +24,7 @@ const UserSchema = new Schema<UserModelType>(
 		},
 		enabled: {
 			type: Boolean,
-			default: true
+			default: true,
 		},
 		permissions: {
 			type: [String],

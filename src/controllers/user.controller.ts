@@ -1,10 +1,17 @@
-import createUserAction from '../actions/create.user.action';
+import createUserAction from '../actions/user/create.user.action';
 import { CreateUserType, UserType } from '../types/user.types';
+import findUserAction from '../actions/user/find.user.action';
 
 async function createUser(userData: CreateUserType): Promise<UserType> {
-    const user = await createUserAction(userData);
+	const user = await createUserAction(userData);
 
-    return user;
+	return user;
 }
 
-export { createUser };
+async function loginUser(username: string): Promise<UserType | null> {
+	const user = await findUserAction(username);
+
+	return user;
+}
+
+export { createUser, loginUser };
