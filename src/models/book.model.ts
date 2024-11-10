@@ -8,40 +8,49 @@ type BookModelType = {
 	author: string;
 	publication_date: string;
 	publishing_house: string;
-	availabe: boolean;
+	available: boolean;
 	enabled: boolean;
 };
 
-const BookSchema = new Schema({
-	id: {
-		type: String,
-		required: true,
+const BookSchema = new Schema(
+	{
+		id: {
+			type: String,
+			required: true,
+		},
+		title: {
+			type: String,
+			required: true,
+		},
+		genre: {
+			type: String,
+			default: '',
+		},
+		author: {
+			type: String,
+			default: '',
+		},
+		publication_date: {
+			type: Date,
+			default: '',
+		},
+		publishing_house: {
+			type: String,
+			default: '',
+		},
+		available: {
+			type: Boolean,
+			default: true,
+		},
+		enabled: {
+			type: Boolean,
+			default: true,
+		},
 	},
-	title: {
-		type: String,
-		required: true,
-	},
-	genre: {
-		type: String,
-	},
-	author: {
-        type: String,
-	},
-	publication_date: {
-		type: Date,
-	},
-	publishing_house: {
-		type: String,
-	},
-	available: {
-		type: Boolean,
-		default: true,
-	},
-	enabled: {
-		type: Boolean,
-		default: true,
-	},
-});
+	{
+		versionKey: false,
+	}
+);
 
 const BookModel = model<BookModelType>('Book', BookSchema);
 

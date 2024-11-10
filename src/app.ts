@@ -21,8 +21,8 @@ export default function createApp() {
 	// app.use(cors());
 	app.use(express.json());
 
-	app.use(SERVER_VERSION + 'users', userRoutes);
-	app.use(SERVER_VERSION + 'books', bookRoutes);
+	app.use(SERVER_VERSION + 'user', userRoutes);
+	app.use(SERVER_VERSION + 'book', bookRoutes);
 
 	app.use(routeNotFound);
 	return app;
