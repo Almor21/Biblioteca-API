@@ -4,6 +4,6 @@ export type BookType = Omit<BookModelType, '_id'>;
 
 export type CreateBookType = {
 	title: string;
-} & Partial<Omit<BookType, 'id' | 'title'>>;
+} & Partial<Omit<BookType, 'id' | 'title' | 'reservations'>>;
 
 export type UpdateBookType = Partial<Omit<BookType, 'id'>>

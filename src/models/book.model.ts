@@ -6,10 +6,16 @@ type BookModelType = {
 	title: string;
 	genre: string;
 	author: string;
-	publication_date: string;
-	publishing_house: string;
+	publication_date: Date;
+	publishing_house: Date;
 	available: boolean;
 	enabled: boolean;
+	reservations: {
+		id: string;
+		idUser: string;
+		startDate: Date;
+		endDate: Date;
+	}[];
 };
 
 const BookSchema = new Schema(
@@ -46,6 +52,14 @@ const BookSchema = new Schema(
 			type: Boolean,
 			default: true,
 		},
+		reservations: [
+			{
+				id: String,
+				idUser: String,
+				startDate: Date,
+				endDate: Date,
+			},
+		],
 	},
 	{
 		versionKey: false,

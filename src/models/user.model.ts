@@ -7,6 +7,12 @@ type UserModelType = {
 	password: string;
 	enabled: boolean;
 	permissions: string[];
+	reservations: {
+		id: string;
+		idBook: string;
+		startDate: Date;
+		endDate: Date;
+	}[];
 };
 
 const UserSchema = new Schema<UserModelType>(
@@ -29,6 +35,14 @@ const UserSchema = new Schema<UserModelType>(
 		permissions: {
 			type: [String],
 		},
+		reservations: [
+			{
+				id: String,
+				idBook: String,
+				startDate: Date,
+				endDate: Date,
+			},
+		],
 	},
 	{
 		versionKey: false,

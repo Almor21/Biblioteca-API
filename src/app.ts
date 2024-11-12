@@ -2,6 +2,7 @@ import userRoutes from './routes/user.routes';
 import express from 'express';
 import { Request, Response } from 'express';
 import bookRoutes from './routes/book.routes';
+import reserveRoutes from './routes/reserve.routes';
 // import cors from "cors";
 
 // ROUTES
@@ -23,6 +24,7 @@ export default function createApp() {
 
 	app.use(SERVER_VERSION + 'user', userRoutes);
 	app.use(SERVER_VERSION + 'book', bookRoutes);
+	app.use(SERVER_VERSION + 'reserve', reserveRoutes);
 
 	app.use(routeNotFound);
 	return app;
