@@ -1,11 +1,16 @@
 import { Router, Request, Response } from 'express';
-import { BookType, CreateBookType } from '../types/book.types';
-import { createBook, findBooks } from '../controllers/book.controller';
+import { BookType, CreateBookType, UpdateBookType } from '../types/book.types';
+import {
+	createBook,
+	findBooks,
+	modifyBook,
+} from '../controllers/book.controller';
 
 import { AuthMiddleware } from '../middleware/auth';
 import { PermissionsMiddleware } from '../middleware/permission';
 
 import { PERMISSIONS } from '../constants/permissions.constant';
+import filterFields from '../utils/filterFieldsUtil';
 
 const bookRoutes = Router();
 
@@ -33,7 +38,13 @@ async function CreateBook(request: Request, response: Response) {
 async function FindBook(request: Request, response: Response) {
 	const id = request.params.id;
 	const filter: Partial<Omit<BookType, 'id' | 'enabled' | 'available'>> =
-		request.query;
+		filterFields(request.query, [
+			'title',
+			'genre',
+			'author',
+			'publication_date',
+			'publishing_hous',
+		]);
 
 	try {
 		let data: BookType[] = [];
@@ -60,6 +71,37 @@ async function FindBook(request: Request, response: Response) {
 	}
 }
 
+async function ModifyBook(request: Request, response: Response) {
+	const id = request.params.id;
+	const data: UpdateBookType = filterFields(request.body, [
+		'title',
+		'genre',
+		'author',
+		'publication_date',
+		'publishing_hous',
+	]);
+
+	try {
+		const result = await modifyBook(id, data);
+
+		if (!result) {
+			return response.status(404).json({
+				message: 'Book not found.',
+			});
+		}
+
+		return response.status(200).json({
+			message: 'Success.',
+			data: result,
+		});
+	} catch (error) {
+		console.log(error);
+		return response.status(500).json({
+			message: 'Failure',
+		});
+	}
+}
+
 bookRoutes.post(
 	'/create',
 	AuthMiddleware,
@@ -68,5 +110,11 @@ bookRoutes.post(
 );
 bookRoutes.get('/', FindBook);
 bookRoutes.get('/:id', FindBook);
+bookRoutes.put(
+	'/update/:id',
+	AuthMiddleware,
+	PermissionsMiddleware([PERMISSIONS.MODIFY_BOOK]),
+	ModifyBook
+);
 
 export default bookRoutes;
