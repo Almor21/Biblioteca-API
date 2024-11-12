@@ -6,4 +6,4 @@ export type CreateBookType = {
 	title: string;
 } & Partial<Omit<BookType, 'id' | 'title'>>;
 
-export type UpdateBookType = Partial<Omit<BookType, 'id' | 'enabled'>>
+export type UpdateBookType = Partial<Omit<BookType, 'id'>>

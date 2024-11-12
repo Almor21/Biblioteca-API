@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { BookType, CreateBookType, UpdateBookType } from '../types/book.types';
 import {
 	createBook,
+	deleteBook,
 	findBooks,
 	modifyBook,
 } from '../controllers/book.controller';
@@ -44,6 +45,7 @@ async function FindBook(request: Request, response: Response) {
 			'author',
 			'publication_date',
 			'publishing_hous',
+			'enabled',
 		]);
 
 	try {
@@ -79,6 +81,7 @@ async function ModifyBook(request: Request, response: Response) {
 		'author',
 		'publication_date',
 		'publishing_hous',
+		'enabled'
 	]);
 
 	try {
@@ -87,6 +90,30 @@ async function ModifyBook(request: Request, response: Response) {
 		if (!result) {
 			return response.status(404).json({
 				message: 'Book not found.',
+			});
+		}
+
+		return response.status(200).json({
+			message: 'Success.',
+			data: result,
+		});
+	} catch (error) {
+		console.log(error);
+		return response.status(500).json({
+			message: 'Failure',
+		});
+	}
+}
+
+async function DeleteBook(request: Request, response: Response) {
+	const id = request.params.id;
+
+	try {
+		const result = await deleteBook(id);
+
+		if (!result) {
+			return response.status(404).json({
+				message: 'User not found.',
 			});
 		}
 
@@ -115,6 +142,12 @@ bookRoutes.put(
 	AuthMiddleware,
 	PermissionsMiddleware([PERMISSIONS.MODIFY_BOOK]),
 	ModifyBook
+);
+bookRoutes.delete(
+	'/delete/:id',
+	AuthMiddleware,
+	PermissionsMiddleware([PERMISSIONS.DELETE_BOOK]),
+	DeleteBook
 );
 
 export default bookRoutes;
