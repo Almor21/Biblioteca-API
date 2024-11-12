@@ -12,4 +12,5 @@ export type UpdateUserType = {
     username?: string;
     password?: string;
     permissions?: string[];
+    enabled?: boolean;
 }

@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { CreateUserType, UpdateUserType, UserType } from '../types/user.types';
 import {
 	createUser,
+	deleteUser,
 	loginUser,
 	modifyUser,
 } from '../controllers/user.controller';
@@ -68,6 +69,7 @@ async function LoginUser(request: Request, response: Response) {
 		return response.status(200).json({
 			message: 'Success.',
 			token,
+			data: user
 		});
 	} catch (error) {
 		console.log(error);
@@ -96,6 +98,7 @@ async function ModifyUser(request: Request, response: Response) {
 		'username',
 		'password',
 		'permissions',
+		'enabled'
 	]);
 
 	try {
@@ -119,8 +122,45 @@ async function ModifyUser(request: Request, response: Response) {
 	}
 }
 
+async function DeleteUser(request: Request, response: Response) {
+	const user: UserType = request.body.user;
+	const id = request.params.id;
+
+	if (
+		!(
+			id === user.id ||
+			user.permissions.some((p) => p === PERMISSIONS.DELETE_USER)
+		)
+	) {
+		return response.status(403).json({
+			message: 'Access denied.',
+		});
+	}
+
+	try {
+		const result = await deleteUser(id);
+
+		if (!result) {
+			return response.status(404).json({
+				message: 'User not found.',
+			});
+		}
+
+		return response.status(200).json({
+			message: 'Success.',
+			data: result,
+		});
+	} catch (error) {
+		console.log(error);
+		return response.status(500).json({
+			message: 'Failure',
+		});
+	}
+}
+
 userRoutes.post('/create', CreateUser);
 userRoutes.post('/login', LoginUser);
 userRoutes.put('/update/:id', AuthMiddleware, ModifyUser);
+userRoutes.delete('/delete/:id', AuthMiddleware, DeleteUser);
 
 export default userRoutes;
