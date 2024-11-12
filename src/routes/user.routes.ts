@@ -10,6 +10,7 @@ import { env } from 'process';
 import jwt from 'jsonwebtoken';
 import { PERMISSIONS } from '../constants/permissions.constant';
 import { AuthMiddleware } from '../middleware/auth';
+import filterFields from '../utils/filterFieldsUtil';
 
 const userRoutes = Router();
 
@@ -77,16 +78,6 @@ async function LoginUser(request: Request, response: Response) {
 }
 
 async function ModifyUser(request: Request, response: Response) {
-	if (
-		['username', 'password', 'permissions'].some(
-			(v) => request.body[v] === undefined
-		)
-	) {
-		return response.status(400).json({
-			message: 'Missing fields',
-		});
-	}
-
 	const user: UserType = request.body.user;
 	const id = request.params.id;
 
@@ -101,7 +92,11 @@ async function ModifyUser(request: Request, response: Response) {
 		});
 	}
 
-	const data: UpdateUserType = request.body;
+	const data: UpdateUserType = filterFields(request.body, [
+		'username',
+		'password',
+		'permissions',
+	]);
 
 	try {
 		const result = await modifyUser(id, data);
