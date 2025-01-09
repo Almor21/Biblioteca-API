@@ -7,7 +7,7 @@ Este es un servidor montado con **Express.js** para administrar una biblioteca, 
 - **Gestión de usuarios**: Registro, inicio de sesión y administración de usuarios.
 - **Gestión de libros**: Crear, leer, actualizar y eliminar libros.
 - **Gestión de reservas**: Realizar reservas de libros.
-- **Sistema de permisos**: Control de acceso basado en roles (admin, usuario).
+- **Sistema de permisos**: Control de acceso basado en permisos.
 - **Autenticación JWT**: Implementación de autenticación segura para garantizar el acceso a las rutas protegidas.
 - **Conexión con MongoDB**: Almacenamiento de datos de usuarios, libros y reservas.
 
